@@ -6,7 +6,7 @@
 /*   By: vparis <vparis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/17 14:23:03 by vparis            #+#    #+#             */
-/*   Updated: 2018/10/25 17:32:02 by vparis           ###   ########.fr       */
+/*   Updated: 2018/11/01 20:17:00 by vparis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int				sdl_destroy(t_sdl *sdl)
 
 int				sdl_clear(t_sdl *sdl)
 {
+	SDL_SetRenderDrawColor(sdl->renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 	SDL_RenderFillRect(sdl->renderer, NULL);
 	return (SUCCESS);
 }

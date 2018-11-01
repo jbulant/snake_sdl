@@ -35,7 +35,7 @@ t_sprite_anim		*new_sprite_anim(t_sdl *sdl, char *file, int width, int height)
 	tmp->frame = 0;
 	tmp->width = width;
 	tmp->height = height;
-	tmp->speed = 5;
+	tmp->speed = 3;
 	tmp->x_frame = surf->w / width;
 	tmp->n_frame = (surf->h / height) * tmp->x_frame;
 	SDL_FreeSurface(surf);

@@ -6,7 +6,7 @@
 #    By: vparis <vparis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/10/02 17:37:24 by vparis            #+#    #+#              #
-#    Updated: 2018/10/25 16:53:31 by vparis           ###   ########.fr        #
+#    Updated: 2018/11/01 18:58:55 by vparis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ else
 	SDLINCD		=	/usr/include/SDL2
 endif
 
-FILES		=	main.c sprite.c
+FILES		=	main.c sprite.c raycast.c
 FILES		+=	$(SDLD)/sdl1.c $(SDLD)/sdl2.c $(SDLD)/sdl3.c
 
 SRCS		=	$(addprefix $(SRCD)/, $(FILES))

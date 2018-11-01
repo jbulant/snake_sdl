@@ -20,7 +20,7 @@
 # include "sdl_m.h"
 
 typedef struct		s_sprite_anim {
-
+	SDL_Texture		*texture;
 	int				frame;
 	int				x_frame;
 	int				n_frame;
