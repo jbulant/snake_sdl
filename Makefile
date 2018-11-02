@@ -6,12 +6,12 @@
 #    By: vparis <vparis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/10/02 17:37:24 by vparis            #+#    #+#              #
-#    Updated: 2018/11/01 18:58:55 by vparis           ###   ########.fr        #
+#    Updated: 2018/11/02 18:25:40 by vparis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	snake
-CC			=	gcc
+CC			=	clang
 
 SRCD		=	srcs
 INCD		=	includes
@@ -35,7 +35,7 @@ OBJS		=	$(patsubst %.c, %.o, $(SRCS))
 
 CFLAGS		+=	-I$(SDLINCD) -I$(LIBFTD)/includes -I$(INCD)
 LDFLAGS		+=	-Wextra -Wall -Wno-unused-result
-LDLIBS		+=	libft/libft.a -L$(SDLLIBD) -lSDL2 -lSDL2_image -lm
+LDLIBS		+=	-L$(LIBFTD) -lft -L$(SDLLIBD) -lSDL2 -lSDL2_image -lm
 
 .PHONY: clean fclean re rer
 

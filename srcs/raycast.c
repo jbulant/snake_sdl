@@ -6,7 +6,7 @@
 /*   By: vparis <vparis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/01 18:57:36 by vparis            #+#    #+#             */
-/*   Updated: 2018/11/01 23:00:50 by vparis           ###   ########.fr       */
+/*   Updated: 2018/11/02 18:42:58 by vparis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ void	raycast(t_sdl *sdl, t_player *player)
 	t_vec	step;
 	int		hit;
 	int		side;
+	int		y;
 	t_float	wall_z;
 
 	ray.pos = player->pos;
@@ -200,22 +201,22 @@ void	raycast(t_sdl *sdl, t_player *player)
 			wallX = ray.pos.x + wall_z * ray.dir.x;
 		wallX -= floor(wallX);
 
+		unsigned char	c[4];
+		Uint32 			color;
 		//x coordinate on the texture
 		int texX = (int)(wallX * (double)text->w);
 		if(side == 0 && ray.dir.x > 0)
 			texX = text->w - texX - 1;
 		if(side == 1 && ray.dir.y < 0)
 			texX = text->w - texX - 1;
-		for(int y = drawStart; y<drawEnd; y++)
+		for(y = drawStart; y<drawEnd; y++)
 		{
 			int d = y * 256 - HEIGHT * 128 + lineHeight * 128;  //256 and 128 factors to avoid floats
 			// TODO: avoid the division to speed this up
 			int texY = ((d * text->w) / lineHeight) / 256;
 
 			//Uint32 color = pixels[text->pitch * texY + texX];
-			Uint32 color = getpixel(text, texX, texY);
-			unsigned char	c[4];
-
+			color = getpixel(text, texX, texY);
 			//make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
 			if(side == 1)
 				color = (color >> 1) & 8355711;
@@ -226,6 +227,69 @@ void	raycast(t_sdl *sdl, t_player *player)
 				c[0], c[1], c[2],
 				SDL_ALPHA_OPAQUE);
 			SDL_RenderDrawPoint(sdl->renderer, x, y);
+		}
+
+		//FLOOR CASTING
+		double floorXWall, floorYWall; //x, y position of the floor texel at the bottom of the wall
+
+		//4 different wall directions possible
+		if(side == 0 && ray.dir.x > 0)
+		{
+			floorXWall = map_pos.x;
+			floorYWall = map_pos.y + wallX;
+		}
+		else if(side == 0 && ray.dir.x < 0)
+		{
+			floorXWall = map_pos.x + 1.0;
+			floorYWall = map_pos.y + wallX;
+		}
+		else if(side == 1 && ray.dir.y > 0)
+		{
+			floorXWall = map_pos.x + wallX;
+			floorYWall = map_pos.y;
+		}
+		else
+		{
+			floorXWall = map_pos.x + wallX;
+			floorYWall = map_pos.y + 1.0;
+		}
+
+		double distWall, distPlayer, currentDist;
+
+		distWall = wall_z;
+		distPlayer = 0.0;
+
+		if (drawEnd < 0)
+			drawEnd = HEIGHT; //becomes < 0 when the integer overflows
+
+		//draw the floor from drawEnd to the bottom of the screen
+		for(y = drawEnd; y < HEIGHT; y++)
+		{
+			currentDist = HEIGHT / (2.0 * y - HEIGHT); //you could make a small lookup table for this instead
+
+			double weight = (currentDist - distPlayer) / (distWall - distPlayer);
+
+			double currentFloorX = weight * floorXWall + (1.0 - weight) * ray.pos.x;
+			double currentFloorY = weight * floorYWall + (1.0 - weight) * ray.pos.y;
+
+			int floorTexX, floorTexY;
+			floorTexX = (int)(currentFloorX * text->w) % text->w;
+			floorTexY = (int)(currentFloorY * text->h) % text->h;
+
+			//floor
+			color = (getpixel(sdl_get_texture(3), floorTexX, floorTexY) >> 1)
+				& 8355711;
+			*(Uint32*)c = color;
+			SDL_SetRenderDrawColor(sdl->renderer, c[0], c[1], c[2],
+				SDL_ALPHA_OPAQUE);
+			SDL_RenderDrawPoint(sdl->renderer, x, y);
+
+			color = (getpixel(sdl_get_texture(5), floorTexX, floorTexY) >> 1)
+				& 8355711;
+			*(Uint32*)c = color;
+			SDL_SetRenderDrawColor(sdl->renderer, c[0], c[1], c[2],
+				SDL_ALPHA_OPAQUE);
+			SDL_RenderDrawPoint(sdl->renderer, x, HEIGHT - y);
 		}
 
 		//draw the pixels of the stripe as a vertical line

@@ -6,7 +6,7 @@
 /*   By: vparis <vparis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/02 16:18:38 by vparis            #+#    #+#             */
-/*   Updated: 2018/11/01 23:03:46 by vparis           ###   ########.fr       */
+/*   Updated: 2018/11/02 18:27:11 by vparis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static t_textures	*sdl_get_textures(void)
 		{3, "textures/eagle.png", NULL},
 		{4, "textures/wood.png", NULL},
 		{5, "textures/purplestone.png", NULL},
+		{6, "textures/colorstone.png", NULL},
 		{-1, NULL, NULL}
 	};
 
